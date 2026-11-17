@@ -16,6 +16,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          debug: true
           script: |
             # Переходим в нужную папку (замените на ваш реальный путь, если он другой)
             cd /root/lessons-devops
