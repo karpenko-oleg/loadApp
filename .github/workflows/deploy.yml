@@ -24,6 +24,5 @@ jobs:
             # Сбрасываем возможные локальные изменения и подтягиваем свежий код
             git fetch origin main
             git reset --hard origin/main
-            
             # Перезапускаем контейнеры, если используется Docker Compose
             # docker compose up -d --build
