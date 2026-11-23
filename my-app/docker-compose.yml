@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      CORS_ORIGINS: "http://localhost:5173"
+      METRICS_HISTORY_SECONDS: ${METRICS_HISTORY_SECONDS:-600}
+      METRICS_SAMPLE_INTERVAL: ${METRICS_SAMPLE_INTERVAL:-1.0}
+      LOAD_TEMP_DIR: /tmp/vps-lab
+      LOAD_HTTP_TARGET: http://127.0.0.1:8000/api/healthz
+    expose:
+      - "8000"
+    mem_limit: 1g
+    cpus: 2.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/healthz')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_BIND:-127.0.0.1}:${FRONTEND_PORT:-8080}:80"
+    restart: unless-stopped
+
